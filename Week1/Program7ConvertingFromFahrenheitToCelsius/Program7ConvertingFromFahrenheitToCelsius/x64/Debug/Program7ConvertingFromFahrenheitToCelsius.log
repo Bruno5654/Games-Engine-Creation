@@ -1,0 +1,3 @@
+﻿  Program7ConvertingFromFahrenheitToCelsius.cpp
+C:\Users\bruno\OneDrive\Documents\GitHub\Games-Engine-Creation\Week1\Program7ConvertingFromFahrenheitToCelsius\Program7ConvertingFromFahrenheitToCelsius\Program7ConvertingFromFahrenheitToCelsius.cpp(8,30): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Program7ConvertingFromFahrenheitToCelsius.vcxproj -> C:\Users\bruno\OneDrive\Documents\GitHub\Games-Engine-Creation\Week1\Program7ConvertingFromFahrenheitToCelsius\x64\Debug\Program7ConvertingFromFahrenheitToCelsius.exe
