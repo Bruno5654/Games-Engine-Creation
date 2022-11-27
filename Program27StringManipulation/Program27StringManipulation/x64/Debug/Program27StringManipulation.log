@@ -1,0 +1,3 @@
+﻿  Program27StringManipulation.cpp
+C:\Users\bruno\OneDrive\Documents\GitHub\Games-Engine-Creation\Program27StringManipulation\Program27StringManipulation\Program27StringManipulation.cpp(11,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Program27StringManipulation.vcxproj -> C:\Users\bruno\OneDrive\Documents\GitHub\Games-Engine-Creation\Program27StringManipulation\x64\Debug\Program27StringManipulation.exe
