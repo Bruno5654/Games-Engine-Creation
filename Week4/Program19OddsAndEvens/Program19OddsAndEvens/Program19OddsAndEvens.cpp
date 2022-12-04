@@ -47,5 +47,5 @@ bool OddOrEven(int a)
 void OutputResults(int numOfOdd, int oddTotal, int numOfEven, int evenTotal)
 {
     cout << "You entered " << numOfEven << " even numbers and their sum is " << evenTotal << endl;
-    cout << "You entered " << numOfOdd << " even numbers and their sum is " << oddTotal << endl;
+    cout << "You entered " << numOfOdd << " odd numbers and their sum is " << oddTotal << endl;
 }
