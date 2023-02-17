@@ -1,4 +1,0 @@
-﻿  Program18SmallestNumber.cpp
-C:\Users\r019574m\Documents\GitHub\Games-Engine-Creation\Week4\Program18SmallestNumber\Program18SmallestNumber\Program18SmallestNumber.cpp(33,10): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\r019574m\Documents\GitHub\Games-Engine-Creation\Week4\Program18SmallestNumber\Program18SmallestNumber\Program18SmallestNumber.cpp(65,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-  Program18SmallestNumber.vcxproj -> C:\Users\r019574m\Documents\GitHub\Games-Engine-Creation\Week4\Program18SmallestNumber\x64\Debug\Program18SmallestNumber.exe
