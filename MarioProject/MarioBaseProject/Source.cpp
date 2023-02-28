@@ -12,13 +12,19 @@ SDL_Window* g_window = nullptr;
 
 bool InitSDL();
 void CLoseSDL();
+bool Update();
 
 int main(int argc, char* args[])
 {
-	if (InitSDL())
+	//Flat to check if we quit.
+	bool quit = false;
+
+	//Game Loop
+	while (!quit)
 	{
-		SDL_Delay(5000);
+		quit = Update();
 	}
+
 
 	CLoseSDL();
 
@@ -40,6 +46,8 @@ bool InitSDL()
 			cout << "Window was not created. Error: " << SDL_GetError();
 			return false;
 		}
+		SDL_Renderer* g_renderer = nullptr;
+		SDL_Texture* g_texture = nullptr;
 	}
 }
 
@@ -51,4 +59,22 @@ void CLoseSDL()
 	//Quit SDL subsytems.
 	IMG_Quit();
 	SDL_Quit();
+}
+
+bool Update()
+{
+	SDL_Event e;
+
+	//Get events
+	SDL_PollEvent(&e);
+
+	switch (e.type)
+	{
+	//Click x to quit.  	
+	case SDL_QUIT:
+			return true;
+		break;
+	}
+
+	return false;
 }
