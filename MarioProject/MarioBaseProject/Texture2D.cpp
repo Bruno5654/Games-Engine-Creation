@@ -9,14 +9,6 @@ Texture2D::Texture2D(SDL_Renderer* renderer)
 	m_renderer = renderer;
 }
 
-Texture2D::~Texture2D()
-{
-	//Free up memory.
-	Free();
-
-	m_renderer = nullptr;
-}
-
 bool Texture2D::LoadFromFile(std::string path)
 {
 	//Remove memory used for a previous texture.
@@ -70,4 +62,12 @@ void Texture2D::Render(Vector2D new_position, SDL_RendererFlip flip, double anag
 
 	//Render to screen.
 	SDL_RenderCopyEx(m_renderer, m_texture, nullptr, &renderLocation, 0, nullptr, SDL_FLIP_NONE);
+}
+
+Texture2D::~Texture2D()
+{
+	//Free up memory.
+	Free();
+
+	m_renderer = nullptr;
 }
