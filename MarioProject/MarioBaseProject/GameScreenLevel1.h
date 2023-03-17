@@ -1,4 +1,6 @@
 #pragma once
+#ifndef _GAMESCREENLEVEL1_H
+#define _GAMESCREENLEVEL1_H
 #include "GameScreen.h"
 #include "Commons.h"
 
@@ -10,6 +12,7 @@ class GameScreenLevel1 : GameScreen
 	private:
 		Texture2D* m_Background_texture;
 		bool SetUpLevel();
+	
 	public:
 		GameScreenLevel1(SDL_Renderer* renderer);
 		~GameScreenLevel1();
@@ -20,3 +23,4 @@ class GameScreenLevel1 : GameScreen
 
 };
 
+#endif

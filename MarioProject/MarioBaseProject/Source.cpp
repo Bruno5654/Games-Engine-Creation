@@ -16,12 +16,13 @@ using namespace std;
 //Globals
 SDL_Window* g_window = nullptr;
 SDL_Renderer* g_renderer = nullptr;
+Texture2D* g_texture = nullptr;
 
 bool InitSDL();
 void CLoseSDL();
 bool Update();
 void Render();
-SDL_Texture* LoadTextureFromFile(string path);
+
 
 int main(int argc, char* args[])
 {
@@ -81,29 +82,14 @@ bool InitSDL()
 			cout << "Renderer could not initalise. Error: " << SDL_GetError();
 			return false;
 		}
-
 	}
-}
-
-void CLoseSDL()
-{
-	//Release the window.
-	SDL_DestroyWindow(g_window);
-	g_window = nullptr;
 	
-	//Release the renderer.
-	SDL_DestroyRenderer(g_renderer);
-	g_renderer = nullptr;
-
-	//Destroy the game screen manager.
-	delete game_screen_manager;
-	game_screen_manager = nullptr;
-
-	
-	//Quit SDL subsytems.
-	IMG_Quit();
-	SDL_Quit();
-
+	//Load the background texture.
+	g_texture = new Texture2D(g_renderer);
+	if (!g_texture->LoadFromFile("Images/test.bmp"))
+	{
+		return false;
+	}
 }
 
 bool Update()
@@ -134,10 +120,30 @@ void Render()
 	SDL_SetRenderDrawColor(g_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	SDL_RenderClear(g_renderer);
 
-	game_screen_manager->Render();
+	g_texture->Render(Vector2D(), SDL_FLIP_NONE);
 
 	//Update the screen.
 	SDL_RenderPresent(g_renderer);
 }
 
+void CLoseSDL()
+{
+	//Release the window.
+	SDL_DestroyWindow(g_window);
+	g_window = nullptr;
+
+	//Release the renderer.
+	SDL_DestroyRenderer(g_renderer);
+	g_renderer = nullptr;
+
+	//Destroy the game screen manager.
+	delete game_screen_manager;
+	game_screen_manager = nullptr;
+
+
+	//Quit SDL subsytems.
+	IMG_Quit();
+	SDL_Quit();
+
+}
 
