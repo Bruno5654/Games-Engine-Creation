@@ -3,15 +3,22 @@
 #define _GAMESCREENLEVEL1_H
 #include "GameScreen.h"
 #include "Commons.h"
+#include "Character.h"
+#include "Character2B.h"
+#include "CharacterPod.h"
 
 
 class Texture2D;
+class Character2B;
+class CharacterPod;
 
 class GameScreenLevel1 : GameScreen
 {
 	private:
 		Texture2D* m_Background_texture;
 		bool SetUpLevel();
+		Character2B* my_character;
+		CharacterPod* my_character2;
 	
 	public:
 		GameScreenLevel1(SDL_Renderer* renderer);

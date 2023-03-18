@@ -16,7 +16,7 @@ using namespace std;
 //Globals
 SDL_Window* g_window = nullptr;
 SDL_Renderer* g_renderer = nullptr;
-Texture2D* g_texture = nullptr;
+//Texture2D* g_texture = nullptr;
 
 bool InitSDL();
 void CLoseSDL();
@@ -82,14 +82,7 @@ bool InitSDL()
 			cout << "Renderer could not initalise. Error: " << SDL_GetError();
 			return false;
 		}
-	}
-	
-	//Load the background texture.
-	g_texture = new Texture2D(g_renderer);
-	if (!g_texture->LoadFromFile("Images/test.bmp"))
-	{
-		return false;
-	}
+	} 
 }
 
 bool Update()
@@ -97,7 +90,6 @@ bool Update()
 	SDL_Event e;
 	Uint32 new_time = SDL_GetTicks();
 	
-
 	//Get events
 	SDL_PollEvent(&e);
 
@@ -120,7 +112,8 @@ void Render()
 	SDL_SetRenderDrawColor(g_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	SDL_RenderClear(g_renderer);
 
-	g_texture->Render(Vector2D(), SDL_FLIP_NONE);
+	//g_texture->Render(Vector2D(), SDL_FLIP_NONE);
+	game_screen_manager->Render();
 
 	//Update the screen.
 	SDL_RenderPresent(g_renderer);

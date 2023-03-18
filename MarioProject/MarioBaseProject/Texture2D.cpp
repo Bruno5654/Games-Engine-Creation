@@ -58,10 +58,10 @@ void Texture2D::Free()
 void Texture2D::Render(Vector2D new_position, SDL_RendererFlip flip, double anagle)
 {
 	//Set position to render the texture
-	SDL_Rect renderLocation = { 0,0,m_width,m_height };
+	SDL_Rect renderLocation = { new_position.x,new_position.y,m_width,m_height };
 
 	//Render to screen.
-	SDL_RenderCopyEx(m_renderer, m_texture, nullptr, &renderLocation, 0, nullptr, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(m_renderer, m_texture, nullptr, &renderLocation, 0, nullptr, flip);
 }
 
 Texture2D::~Texture2D()
