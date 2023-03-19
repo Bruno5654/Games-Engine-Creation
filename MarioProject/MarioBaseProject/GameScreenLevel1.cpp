@@ -1,6 +1,7 @@
 #include "GameScreenLevel1.h"
 #include "Texture2D.h"
 #include <iostream>
+#include "Collisions.h"
 
 GameScreenLevel1::GameScreenLevel1(SDL_Renderer* renderer) : GameScreen(renderer)
 {
@@ -37,6 +38,12 @@ void GameScreenLevel1::Update(float deltaTime, SDL_Event e)
 	//Update Character.
 	my_character->Update(deltaTime, e);
 	my_character2->Update(deltaTime, e);
+
+	//Collision
+	if (Collisions::Instance()->Circle(my_character, my_character2))
+	{
+		cout << "Circle Hit!" << endl;
+	}
 }
 
 GameScreenLevel1::~GameScreenLevel1()
