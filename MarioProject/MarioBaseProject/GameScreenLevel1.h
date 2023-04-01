@@ -6,7 +6,7 @@
 #include "Character.h"
 #include "Character2B.h"
 #include "CharacterPod.h"
-
+#include "LevelMap.h"
 
 class Texture2D;
 class Character2B;
@@ -19,6 +19,8 @@ class GameScreenLevel1 : GameScreen
 		bool SetUpLevel();
 		Character2B* my_character;
 		CharacterPod* my_character2;
+		void SetLevelMap();
+		LevelMap* m_level_map;
 	
 	public:
 		GameScreenLevel1(SDL_Renderer* renderer);

@@ -1,9 +1,9 @@
 #include "Character2B.h"
 #include "constants.h"
 
-Character2B::Character2B(SDL_Renderer* renderer, string imagePath, Vector2D start_position) : Character(renderer, imagePath, start_position)
+Character2B::Character2B(SDL_Renderer* renderer, string imagePath, Vector2D start_position, LevelMap* map) : Character(renderer, imagePath, start_position, map)
 {
-
+	isFloating = false;
 }
 
 void Character2B::Update(float deltaTime, SDL_Event e)
@@ -58,8 +58,6 @@ void Character2B::Update(float deltaTime, SDL_Event e)
 	}
 	
 	Character::Update(deltaTime,e);
-
-	AddGravity(deltaTime);
 }
 Character2B::~Character2B()
 {

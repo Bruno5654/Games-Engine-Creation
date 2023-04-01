@@ -5,6 +5,7 @@
 
 GameScreenLevel1::GameScreenLevel1(SDL_Renderer* renderer) : GameScreen(renderer)
 {
+	m_level_map = nullptr;
 	SetUpLevel();
 }
 
@@ -18,11 +19,43 @@ bool GameScreenLevel1::SetUpLevel()
 		return false;
 	}
 
+
+	//Set up level.
+	SetLevelMap();
+	
 	//Set up player characters.
-	my_character = new Character2B(m_renderer, "Images/Mario.png", Vector2D(64, 355));
-	my_character2 = new CharacterPod(m_renderer, "Images/Luigi.png", Vector2D(64, 355));
+	my_character = new Character2B(m_renderer, "Images/Mario.png", Vector2D(64, 355),m_level_map);
+	my_character2 = new CharacterPod(m_renderer, "Images/Luigi.png", Vector2D(64, 355),m_level_map);
 
 	return true;
+}
+
+void GameScreenLevel1::SetLevelMap()
+{
+	int map[MAP_HEIGHT][MAP_WIDTH] = { { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+					  { 1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1 },
+					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+					  { 0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0 },
+					  { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1 },
+					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+					  { 1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1 },
+					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+					  { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 } };
+
+	//clear any old maps
+	if (m_level_map != nullptr)
+	{
+		delete m_level_map;
+	}
+
+	//set the new one
+	m_level_map = new LevelMap(map);
+
+
 }
 
 void GameScreenLevel1::Render() 

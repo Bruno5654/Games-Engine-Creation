@@ -1,8 +1,8 @@
 #include "CharacterPod.h"
 
-CharacterPod::CharacterPod(SDL_Renderer* renderer, string imagePath, Vector2D start_position) : Character(renderer, imagePath, start_position)
+CharacterPod::CharacterPod(SDL_Renderer* renderer, string imagePath, Vector2D start_position, LevelMap* map) : Character(renderer, imagePath, start_position, map)
 {
-
+	isFloating = true;
 }
 
 void CharacterPod::Update(float deltaTime, SDL_Event e)
