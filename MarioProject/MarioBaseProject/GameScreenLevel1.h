@@ -11,6 +11,7 @@
 class Texture2D;
 class Character2B;
 class CharacterPod;
+class PowBlock;
 
 class GameScreenLevel1 : GameScreen
 {
@@ -21,6 +22,12 @@ class GameScreenLevel1 : GameScreen
 		CharacterPod* my_character2;
 		void SetLevelMap();
 		LevelMap* m_level_map;
+		PowBlock* m_pow_block;
+		bool m_screenshake;
+		float m_shake_time;
+		float m_wobble;
+		float m_background_yPos;
+		void DoScreenshake();
 	
 	public:
 		GameScreenLevel1(SDL_Renderer* renderer);
@@ -28,6 +35,7 @@ class GameScreenLevel1 : GameScreen
 
 		void Render() override;
 		void Update(float deltaTime, SDL_Event e) override;
+		void UpdatePowBlock();
 
 
 };

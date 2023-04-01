@@ -43,12 +43,16 @@ class Character
 		virtual void Render();
 		virtual void Update(float deltaTime,SDL_Event e);
 		void SetPosition(Vector2D new_position);
+		
+		bool IsJumping() { return m_jumping; }
+		void CancelJump() { m_jumping = false; }
+
 		Vector2D GetPosition();
+		
 		float GetCollisionRadius();
 		Rect2D GetCollisionBox() 
 		{
-			return Rect2D(m_position.x, m_position.y,
-			m_texture->GetWidth(), m_texture->GetHeight());
+			return Rect2D(m_position.x, m_position.y, m_texture->GetWidth(), m_texture->GetHeight());
 		}
 
 };
