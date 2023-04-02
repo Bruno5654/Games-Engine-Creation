@@ -6,11 +6,16 @@
 #include "Character.h"
 #include "Character2B.h"
 #include "CharacterPod.h"
+#include "CharacterStubby.h"
+#include "CharacterCoin.h"
 #include "LevelMap.h"
+#include <vector>
 
 class Texture2D;
 class Character2B;
 class CharacterPod;
+class CharacterStubby;
+class CharacterCoin;
 class PowBlock;
 
 class GameScreenLevel1 : GameScreen
@@ -28,6 +33,11 @@ class GameScreenLevel1 : GameScreen
 		float m_wobble;
 		float m_background_yPos;
 		void DoScreenshake();
+		void UpdateEnemies(float deltaTime, SDL_Event e);
+		void CreateStubby(Vector2D position, FACING direction, float speed);
+		void CreateCoin(Vector2D position);
+		vector<CharacterStubby*> m_enemies;
+		vector<CharacterCoin*> m_coins;
 	
 	public:
 		GameScreenLevel1(SDL_Renderer* renderer);

@@ -10,10 +10,10 @@ Character::Character(SDL_Renderer* renderer, string imagePath, Vector2D start_po
 	{
 		std::cout << "Failed to load character texture!" << std::endl;
 	}
-
 	m_facing_direction = FACING_RIGHT; //Same direction as image.
 	m_moving_left = false;
 	m_moving_right = false;
+	m_alive = true;
 	m_collision_radius = 15.0f;
 	m_current_level_map = map;
 }
@@ -91,7 +91,7 @@ void Character::AddGravity(float deltaTime)
 {
 	if (m_position.y + 64 <= SCREEN_HEIGHT)
 	{
-		m_position.y += deltaTime * GRAVITY;
+		m_position.y += GRAVITY * deltaTime;
 	}
 	else
 	{

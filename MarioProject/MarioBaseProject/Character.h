@@ -24,6 +24,7 @@ class Character
 		bool m_jumping;
 		bool m_can_jump;
 		bool isFloating;
+		bool m_alive;
 		float m_jump_force;
 		float m_collision_radius;
 		virtual void MoveLeft(float deltaTime);
@@ -36,9 +37,12 @@ class Character
 	private:
 		FACING m_facing_direction;
 		LevelMap* m_current_level_map;
+		
 	public:
 		Character(SDL_Renderer* renderer, string imagePath, Vector2D start_position, LevelMap* map);
 		~Character();
+
+		float m_movement_speed;
 
 		virtual void Render();
 		virtual void Update(float deltaTime,SDL_Event e);
@@ -48,13 +52,15 @@ class Character
 		void CancelJump() { m_jumping = false; }
 
 		Vector2D GetPosition();
+
+		void SetAlive(bool isAlive) { m_alive = isAlive; }
+		bool GetAlive() { return m_alive; }
 		
 		float GetCollisionRadius();
 		Rect2D GetCollisionBox() 
 		{
 			return Rect2D(m_position.x, m_position.y, m_texture->GetWidth(), m_texture->GetHeight());
 		}
-
 };
 
 #endif

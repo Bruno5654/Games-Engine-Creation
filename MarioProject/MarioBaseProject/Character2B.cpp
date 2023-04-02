@@ -4,6 +4,7 @@
 Character2B::Character2B(SDL_Renderer* renderer, string imagePath, Vector2D start_position, LevelMap* map) : Character(renderer, imagePath, start_position, map)
 {
 	isFloating = false;
+	m_movement_speed = MOVEMENTSPEED;
 }
 
 void Character2B::Update(float deltaTime, SDL_Event e)
