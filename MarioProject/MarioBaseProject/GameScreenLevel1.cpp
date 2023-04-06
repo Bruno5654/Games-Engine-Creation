@@ -25,8 +25,8 @@ bool GameScreenLevel1::SetUpLevel()
 	SetLevelMap();
 	
 	//Set up player characters.
-	my_character = new Character2B(m_renderer, "Images/Mario.png", Vector2D(64, 343),m_level_map);
-	my_character2 = new CharacterPod(m_renderer, "Images/Luigi.png", Vector2D(32, 325),m_level_map);
+	my_character = new Character2B(m_renderer, "Images/2B.png", Vector2D(64, 336),m_level_map); //If this is lower or higher than the small range around 336 2B starts at a like y 1333
+	my_character2 = new CharacterPod(m_renderer, "Images/Pod.png", Vector2D(32, 325),m_level_map);
 
 	m_pow_block = new PowBlock(m_renderer, m_level_map);
 
@@ -229,7 +229,7 @@ void GameScreenLevel1::DoScreenshake()
 
 void GameScreenLevel1::CreateStubby(Vector2D position, FACING direction, float speed) 
 {
-	m_enemies.push_back(new CharacterStubby(m_renderer, "Images/Koopa.png", m_level_map, position, direction, speed));
+	m_enemies.push_back(new CharacterStubby(m_renderer, "Images/Stubby.png", m_level_map, position, direction, speed));
 }
 
 void GameScreenLevel1::CreateCoin(Vector2D position)

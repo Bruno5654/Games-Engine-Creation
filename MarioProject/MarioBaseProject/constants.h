@@ -1,7 +1,7 @@
 #pragma once
 #define SCREEN_WIDTH 512
 #define SCREEN_HEIGHT 416
-#define MOVEMENTSPEED 80.0f
+#define MOVEMENTSPEED 100.0f
 #define GRAVITY 260.0f
 #define JUMP_FORCE_DECREMENT 400.0f
 #define INITAL_JUMP_FORCE 600.0f
@@ -12,5 +12,5 @@
 #define TILE_WIDTH 32
 #define SHAKE_DURATION 0.25f
 #define INJURED_TIME 2.5f
-#define STUBBY_SPEED 96.0f
+#define STUBBY_SPEED 80.0f
 #define ANIMATION_DELAY 0.2f

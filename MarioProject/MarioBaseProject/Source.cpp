@@ -31,7 +31,7 @@ int main(int argc, char* args[])
 	//Check if SDL was setup correctly.
 	if (InitSDL())
 	{
-		LoadMusic("Audio/Mario.mp3");
+		LoadMusic("Audio/NieR.mp3"); //Music source https://www.youtube.com/watch?v=FknBrGGEtW0
 		if (Mix_PlayingMusic() == 0)
 		{
 			Mix_PlayMusic(g_music, -1);

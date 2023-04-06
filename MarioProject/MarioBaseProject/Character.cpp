@@ -57,7 +57,7 @@ void Character::Update(float deltaTime, SDL_Event e)
 	//Deal with gravity.
 	if (!isFloating && m_current_level_map->GetTileAt(foot_position,centralX_position) == 0)
 	{
-		AddGravity(deltaTime);
+		AddGravity(deltaTime); //Does not seem to work properly. m_map seems to always be a pointer to 0? Gravity moves the character to like 1333 before the game seemingly starts.
 	}
 	else
 	{
