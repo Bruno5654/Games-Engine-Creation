@@ -13,13 +13,19 @@ GameScreenLevel1::GameScreenLevel1(SDL_Renderer* renderer) : GameScreen(renderer
 bool GameScreenLevel1::SetUpLevel()
 {
 	//Load texture.
-	m_Background_texture = new Texture2D(m_renderer);
+	/*m_Background_texture = new Texture2D(m_renderer);
 	if (!m_Background_texture->LoadFromFile("Images/BackgroundMB.png"))
 	{
 		std::cout << "Failed to load background texture!" << std::endl;
 		return false;
-	}
+	}*/
 
+	m_Tile_texture = new Texture2D(m_renderer);
+	if (!m_Tile_texture->LoadFromFile("Images/Platform.png"))
+	{
+		std::cout << "Failed to load Platform texture!" << std::endl;
+		return false;
+	}
 
 	//Set up level.
 	SetLevelMap();
@@ -35,12 +41,6 @@ bool GameScreenLevel1::SetUpLevel()
 
 	CreateStubby(Vector2D(150, 32), FACING_RIGHT, STUBBY_SPEED);
 	CreateStubby(Vector2D(325, 32), FACING_LEFT, STUBBY_SPEED);
-	CreateCoin(Vector2D(325, 32));
-	CreateCoin(Vector2D(150, 32));
-	CreateCoin(Vector2D(325, 128));
-	CreateCoin(Vector2D(150, 128));
-
-
 
 	return true;
 }
@@ -48,14 +48,14 @@ bool GameScreenLevel1::SetUpLevel()
 void GameScreenLevel1::SetLevelMap()
 {
 	int map[MAP_HEIGHT][MAP_WIDTH] = { { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+					  { 0,0,0,2,0,0,0,0,0,0,0,0,2,0,0,0 },
 					  { 1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1 },
 					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+					  { 0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0 },
 					  { 0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0 },
 					  { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1 },
 					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-					  { 0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0 },
+					  { 0,2,0,0,2,0,0,0,0,0,0,2,0,0,2,0 },
 					  { 1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1 },
 					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
@@ -69,6 +69,33 @@ void GameScreenLevel1::SetLevelMap()
 
 	//set the new one
 	m_level_map = new LevelMap(map);
+
+	
+	for (unsigned int i = 0; i < MAP_WIDTH; i++)
+	{
+		for (unsigned int j = 0; j < MAP_HEIGHT; j++)
+		{
+			//Create Coins
+			if (m_level_map->GetTileAt(j, i) == 2)
+			{
+				CreateCoin(Vector2D(i * 32, j * 32));
+			}
+
+			//Create Stubbies
+			if (m_level_map->GetTileAt(j, i) == 3) 
+			{
+				if (i < MAP_WIDTH / 2) //Check which side of the map its on.
+				{
+					CreateStubby(Vector2D(i * 32, j * 32), FACING_RIGHT, STUBBY_SPEED);
+				}
+				else
+				{
+					CreateStubby(Vector2D(i * 32, j * 32), FACING_LEFT, STUBBY_SPEED);
+				}
+				
+			}
+		}
+	}
 
 
 }
@@ -160,7 +187,7 @@ void GameScreenLevel1::UpdateEnemies(float deltaTime, SDL_Event e)
 	}
 }
 
-void GameScreenLevel1::Render() 
+void GameScreenLevel1::Render()
 {
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
@@ -172,7 +199,18 @@ void GameScreenLevel1::Render()
 		m_coins[i]->Render();
 	}
 
-	m_Background_texture->Render(Vector2D(0,m_background_yPos), SDL_FLIP_NONE);
+	for (unsigned int i = 0; i < MAP_WIDTH; i++)
+	{
+		for (unsigned int j = 0; j < MAP_HEIGHT; j++)
+		{
+			if (m_level_map->GetTileAt(j, i) == 1)
+			{
+				m_Tile_texture->Render(Vector2D(i*32,j*32), SDL_FLIP_NONE);
+			}
+		}
+	}
+
+	//m_Background_texture->Render(Vector2D(0,m_background_yPos), SDL_FLIP_NONE);
 	my_character->Render();
 	my_character2->Render();
 	m_pow_block->Render();
@@ -239,8 +277,10 @@ void GameScreenLevel1::CreateCoin(Vector2D position)
 
 GameScreenLevel1::~GameScreenLevel1()
 {
-	delete m_Background_texture;
-	m_Background_texture = nullptr;
+	//delete m_Background_texture;
+	//m_Background_texture = nullptr;
+	delete m_Tile_texture;
+	m_Tile_texture = nullptr;
 	delete my_character;
 	my_character = nullptr;
 	delete my_character2;

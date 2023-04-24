@@ -8,7 +8,6 @@
 #include "CharacterPod.h"
 #include "CharacterStubby.h"
 #include "CharacterCoin.h"
-#include "LevelMap.h"
 #include <vector>
 
 class Texture2D;
@@ -22,6 +21,7 @@ class GameScreenLevel1 : GameScreen
 {
 	private:
 		Texture2D* m_Background_texture;
+		Texture2D* m_Tile_texture;
 		bool SetUpLevel();
 		Character2B* my_character;
 		CharacterPod* my_character2;
@@ -38,6 +38,7 @@ class GameScreenLevel1 : GameScreen
 		void CreateCoin(Vector2D position);
 		vector<CharacterStubby*> m_enemies;
 		vector<CharacterCoin*> m_coins;
+		LevelMap* m_current_level_map;
 	
 	public:
 		GameScreenLevel1(SDL_Renderer* renderer);

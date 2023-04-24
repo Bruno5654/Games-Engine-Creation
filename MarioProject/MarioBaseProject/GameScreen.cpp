@@ -1,5 +1,5 @@
 #include "GameScreen.h"
-
+#include "LevelMap.h"
 
 GameScreen::GameScreen(SDL_Renderer* renderer)
 {
