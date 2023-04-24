@@ -14,3 +14,4 @@
 #define INJURED_TIME 2.5f
 #define STUBBY_SPEED 80.0f
 #define ANIMATION_DELAY 0.2f
+#define TILE_SIZE 32

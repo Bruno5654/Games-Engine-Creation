@@ -12,14 +12,6 @@ GameScreenLevel1::GameScreenLevel1(SDL_Renderer* renderer) : GameScreen(renderer
 
 bool GameScreenLevel1::SetUpLevel()
 {
-	//Load texture.
-	/*m_Background_texture = new Texture2D(m_renderer);
-	if (!m_Background_texture->LoadFromFile("Images/BackgroundMB.png"))
-	{
-		std::cout << "Failed to load background texture!" << std::endl;
-		return false;
-	}*/
-
 	m_Tile_texture = new Texture2D(m_renderer);
 	if (!m_Tile_texture->LoadFromFile("Images/Platform.png"))
 	{
@@ -29,18 +21,12 @@ bool GameScreenLevel1::SetUpLevel()
 
 	//Set up level.
 	SetLevelMap();
-	
-	//Set up player characters.
-	my_character = new Character2B(m_renderer, "Images/2B.png", Vector2D(64, 336),m_level_map); //If this is lower or higher than the small range around 336 2B starts at a like y 1333
-	my_character2 = new CharacterPod(m_renderer, "Images/Pod.png", Vector2D(32, 325),m_level_map);
 
 	m_pow_block = new PowBlock(m_renderer, m_level_map);
 
 	m_screenshake = false;
 	m_background_yPos = 0.0f;
 
-	CreateStubby(Vector2D(150, 32), FACING_RIGHT, STUBBY_SPEED);
-	CreateStubby(Vector2D(325, 32), FACING_LEFT, STUBBY_SPEED);
 
 	return true;
 }
@@ -48,7 +34,7 @@ bool GameScreenLevel1::SetUpLevel()
 void GameScreenLevel1::SetLevelMap()
 {
 	int map[MAP_HEIGHT][MAP_WIDTH] = { { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-					  { 0,0,0,2,0,0,0,0,0,0,0,0,2,0,0,0 },
+					  { 0,3,0,2,0,0,0,0,0,0,0,0,2,0,3,0 },
 					  { 1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1 },
 					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 					  { 0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0 },
@@ -58,7 +44,7 @@ void GameScreenLevel1::SetLevelMap()
 					  { 0,2,0,0,2,0,0,0,0,0,0,2,0,0,2,0 },
 					  { 1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1 },
 					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+					  { 0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 					  { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 } };
 
 	//clear any old maps
@@ -71,14 +57,21 @@ void GameScreenLevel1::SetLevelMap()
 	m_level_map = new LevelMap(map);
 
 	
-	for (unsigned int i = 0; i < MAP_WIDTH; i++)
+	for (int i = 0; i < MAP_WIDTH; i++)
 	{
-		for (unsigned int j = 0; j < MAP_HEIGHT; j++)
+		for (int j = 0; j < MAP_HEIGHT; j++)
 		{
+			//Create Players
+			if (m_level_map->GetTileAt(j, i) == 10)
+			{
+				my_character = new Character2B(m_renderer, "Images/2B.png", Vector2D(i * TILE_SIZE, j * TILE_SIZE), m_level_map); //If this is lower or higher than the small range around 336 2B starts at a like y 1333
+				my_character2 = new CharacterPod(m_renderer, "Images/Pod.png", Vector2D((i * TILE_SIZE)- TILE_SIZE, (j * TILE_SIZE)- TILE_SIZE), m_level_map);
+			}
+
 			//Create Coins
 			if (m_level_map->GetTileAt(j, i) == 2)
 			{
-				CreateCoin(Vector2D(i * 32, j * 32));
+				CreateCoin(Vector2D(i * TILE_SIZE, j* TILE_SIZE));
 			}
 
 			//Create Stubbies
@@ -86,11 +79,11 @@ void GameScreenLevel1::SetLevelMap()
 			{
 				if (i < MAP_WIDTH / 2) //Check which side of the map its on.
 				{
-					CreateStubby(Vector2D(i * 32, j * 32), FACING_RIGHT, STUBBY_SPEED);
+					CreateStubby(Vector2D(i * TILE_SIZE, j * TILE_SIZE), FACING_RIGHT, STUBBY_SPEED);
 				}
 				else
 				{
-					CreateStubby(Vector2D(i * 32, j * 32), FACING_LEFT, STUBBY_SPEED);
+					CreateStubby(Vector2D(i * TILE_SIZE, j * TILE_SIZE), FACING_LEFT, STUBBY_SPEED);
 				}
 				
 			}
@@ -205,7 +198,7 @@ void GameScreenLevel1::Render()
 		{
 			if (m_level_map->GetTileAt(j, i) == 1)
 			{
-				m_Tile_texture->Render(Vector2D(i*32,j*32), SDL_FLIP_NONE);
+				m_Tile_texture->Render(Vector2D(i* TILE_SIZE,j* TILE_SIZE), SDL_FLIP_NONE);
 			}
 		}
 	}
