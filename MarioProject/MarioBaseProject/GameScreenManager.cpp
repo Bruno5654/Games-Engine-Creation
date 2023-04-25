@@ -19,7 +19,7 @@ void GameScreenManager::Update(float deltaTime, SDL_Event e)
 	switch (e.key.keysym.sym)
 	{
 	case SDLK_r:
-		ChangeScreen(SCREEN_LEVEL1);
+		ChangeScreen(SCREEN_LEVEL2);
 		break;
 	}
 	m_current_screen->Update(deltaTime,e);

@@ -67,10 +67,11 @@ bool GameScreenLevel::SetUpLevel(int ID)
 				}
 
 			}
+
 		}
 	}
 
-	m_pow_block = new PowBlock(m_renderer, m_level_map);
+	//m_pow_block = new PowBlock(m_renderer, m_level_map);
 
 	m_screenshake = false;
 	m_background_yPos = 0.0f;
@@ -225,7 +226,7 @@ void GameScreenLevel::Render()
 	m_shock->Render();
 	my_character->Render();
 	my_character2->Render();
-	m_pow_block->Render();
+	//m_pow_block->Render();
 }
 
 void GameScreenLevel::Update(float deltaTime, SDL_Event e)
@@ -252,7 +253,7 @@ void GameScreenLevel::Update(float deltaTime, SDL_Event e)
 	my_character->Update(deltaTime, e);
 	my_character2->Update(deltaTime, e);
 
-	UpdatePowBlock();
+	//UpdatePowBlock();
 	UpdateEnemies(deltaTime, e);
 
 	for (int i = 0; i < m_coins.size(); i++)
