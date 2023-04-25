@@ -25,7 +25,7 @@ class GameScreenLevel1 : GameScreen
 		bool SetUpLevel();
 		Character2B* my_character;
 		CharacterPod* my_character2;
-		void SetLevelMap();
+		void SetLevelMap(char* path);
 		LevelMap* m_level_map;
 		PowBlock* m_pow_block;
 		bool m_screenshake;

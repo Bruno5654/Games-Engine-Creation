@@ -1,6 +1,7 @@
 #include "GameScreenLevel1.h"
 #include "Texture2D.h"
 #include <iostream>
+#include <fstream>
 #include "Collisions.h"
 #include "PowBlock.h"
 
@@ -20,7 +21,40 @@ bool GameScreenLevel1::SetUpLevel()
 	}
 
 	//Set up level.
-	SetLevelMap();
+	SetLevelMap((char*)"Level1.txt");
+
+	for (int i = 0; i < MAP_WIDTH; i++)
+	{
+		for (int j = 0; j < MAP_HEIGHT; j++)
+		{
+			//Create Players
+			if (m_level_map->GetTileAt(j, i) == 9)
+			{
+				my_character = new Character2B(m_renderer, "Images/2B.png", Vector2D(i * TILE_SIZE, j * TILE_SIZE), m_level_map); //If this is lower or higher than the small range around 336 2B starts at a like y 1333
+				my_character2 = new CharacterPod(m_renderer, "Images/Pod.png", Vector2D((i * TILE_SIZE) - TILE_SIZE, (j * TILE_SIZE) - TILE_SIZE), m_level_map);
+			}
+
+			//Create Coins
+			if (m_level_map->GetTileAt(j, i) == 2)
+			{
+				CreateCoin(Vector2D(i * TILE_SIZE, j * TILE_SIZE));
+			}
+
+			//Create Stubbies
+			if (m_level_map->GetTileAt(j, i) == 3)
+			{
+				if (i < MAP_WIDTH / 2) //Check which side of the map its on.
+				{
+					CreateStubby(Vector2D(i * TILE_SIZE, j * TILE_SIZE), FACING_RIGHT, STUBBY_SPEED);
+				}
+				else
+				{
+					CreateStubby(Vector2D(i * TILE_SIZE, j * TILE_SIZE), FACING_LEFT, STUBBY_SPEED);
+				}
+
+			}
+		}
+	}
 
 	m_pow_block = new PowBlock(m_renderer, m_level_map);
 
@@ -31,22 +65,27 @@ bool GameScreenLevel1::SetUpLevel()
 	return true;
 }
 
-void GameScreenLevel1::SetLevelMap()
+void GameScreenLevel1::SetLevelMap(char* path)
 {
-	int map[MAP_HEIGHT][MAP_WIDTH] = { { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-					  { 0,3,0,2,0,0,0,0,0,0,0,0,2,0,3,0 },
-					  { 1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1 },
-					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-					  { 0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0 },
-					  { 0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0 },
-					  { 1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1 },
-					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-					  { 0,2,0,0,2,0,0,0,0,0,0,2,0,0,2,0 },
-					  { 1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1 },
-					  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-					  { 0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-					  { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 } };
+	ifstream inFile;
+	int map[MAP_HEIGHT][MAP_WIDTH];
 
+	inFile.open(path);
+
+	if (!inFile.good())
+	{
+		cerr << "Can't open level file " << path << endl;
+	}
+	
+	for (int i = 0; i < MAP_HEIGHT; i++)
+	{
+		for (int j = 0; j < MAP_WIDTH; j++)
+		{
+			inFile >> map[i][j];
+		}
+	}
+
+	inFile.close();
 	//clear any old maps
 	if (m_level_map != nullptr)
 	{
@@ -55,42 +94,6 @@ void GameScreenLevel1::SetLevelMap()
 
 	//set the new one
 	m_level_map = new LevelMap(map);
-
-	
-	for (int i = 0; i < MAP_WIDTH; i++)
-	{
-		for (int j = 0; j < MAP_HEIGHT; j++)
-		{
-			//Create Players
-			if (m_level_map->GetTileAt(j, i) == 10)
-			{
-				my_character = new Character2B(m_renderer, "Images/2B.png", Vector2D(i * TILE_SIZE, j * TILE_SIZE), m_level_map); //If this is lower or higher than the small range around 336 2B starts at a like y 1333
-				my_character2 = new CharacterPod(m_renderer, "Images/Pod.png", Vector2D((i * TILE_SIZE)- TILE_SIZE, (j * TILE_SIZE)- TILE_SIZE), m_level_map);
-			}
-
-			//Create Coins
-			if (m_level_map->GetTileAt(j, i) == 2)
-			{
-				CreateCoin(Vector2D(i * TILE_SIZE, j* TILE_SIZE));
-			}
-
-			//Create Stubbies
-			if (m_level_map->GetTileAt(j, i) == 3) 
-			{
-				if (i < MAP_WIDTH / 2) //Check which side of the map its on.
-				{
-					CreateStubby(Vector2D(i * TILE_SIZE, j * TILE_SIZE), FACING_RIGHT, STUBBY_SPEED);
-				}
-				else
-				{
-					CreateStubby(Vector2D(i * TILE_SIZE, j * TILE_SIZE), FACING_LEFT, STUBBY_SPEED);
-				}
-				
-			}
-		}
-	}
-
-
 }
 
 void GameScreenLevel1::UpdatePowBlock()
@@ -203,7 +206,6 @@ void GameScreenLevel1::Render()
 		}
 	}
 
-	//m_Background_texture->Render(Vector2D(0,m_background_yPos), SDL_FLIP_NONE);
 	my_character->Render();
 	my_character2->Render();
 	m_pow_block->Render();
