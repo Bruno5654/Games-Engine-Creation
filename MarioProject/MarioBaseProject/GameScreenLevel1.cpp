@@ -4,15 +4,23 @@
 #include <fstream>
 #include "Collisions.h"
 #include "PowBlock.h"
-
-GameScreenLevel1::GameScreenLevel1(SDL_Renderer* renderer) : GameScreen(renderer)
+#include <string>
+GameScreenLevel::GameScreenLevel(SDL_Renderer* renderer, GameScreenManager* screenManager, int levelID) : GameScreen(renderer)
 {
 	m_level_map = nullptr;
-	SetUpLevel();
+	m_screenManager = screenManager;
+	SetUpLevel(levelID);
 }
 
-bool GameScreenLevel1::SetUpLevel()
+bool GameScreenLevel::SetUpLevel(int ID)
 {
+	m_Background_texture = new Texture2D(m_renderer);
+	if (!m_Background_texture->LoadFromFile("Images/Background.png"))
+	{
+		std::cout << "Failed to load Background texture!" << std::endl;
+		return false;
+	}
+
 	m_Tile_texture = new Texture2D(m_renderer);
 	if (!m_Tile_texture->LoadFromFile("Images/Platform.png"))
 	{
@@ -20,8 +28,14 @@ bool GameScreenLevel1::SetUpLevel()
 		return false;
 	}
 
+	m_shock = new Shock(m_renderer,"Images/Shock.png", Vector2D(-100,-100));
+
 	//Set up level.
-	SetLevelMap((char*)"Level1.txt");
+
+	string path1 = "Level" + to_string(ID);
+	string path2 = ".txt";
+
+	SetLevelMap(path1+path2);
 
 	for (int i = 0; i < MAP_WIDTH; i++)
 	{
@@ -31,7 +45,7 @@ bool GameScreenLevel1::SetUpLevel()
 			if (m_level_map->GetTileAt(j, i) == 9)
 			{
 				my_character = new Character2B(m_renderer, "Images/2B.png", Vector2D(i * TILE_SIZE, j * TILE_SIZE), m_level_map); //If this is lower or higher than the small range around 336 2B starts at a like y 1333
-				my_character2 = new CharacterPod(m_renderer, "Images/Pod.png", Vector2D((i * TILE_SIZE) - TILE_SIZE, (j * TILE_SIZE) - TILE_SIZE), m_level_map);
+				my_character2 = new CharacterPod(m_renderer, "Images/Pod.png", Vector2D((i * TILE_SIZE) - TILE_SIZE, (j * TILE_SIZE) - TILE_SIZE), m_level_map, m_shock);
 			}
 
 			//Create Coins
@@ -65,7 +79,7 @@ bool GameScreenLevel1::SetUpLevel()
 	return true;
 }
 
-void GameScreenLevel1::SetLevelMap(char* path)
+void GameScreenLevel::SetLevelMap(string path)
 {
 	ifstream inFile;
 	int map[MAP_HEIGHT][MAP_WIDTH];
@@ -96,7 +110,7 @@ void GameScreenLevel1::SetLevelMap(char* path)
 	m_level_map = new LevelMap(map);
 }
 
-void GameScreenLevel1::UpdatePowBlock()
+void GameScreenLevel::UpdatePowBlock()
 {
 	if (Collisions::Instance()->Box(my_character->GetCollisionBox(), m_pow_block->GetCollisionBox()))
 	{
@@ -113,7 +127,7 @@ void GameScreenLevel1::UpdatePowBlock()
 	}
 }
 
-void GameScreenLevel1::UpdateEnemies(float deltaTime, SDL_Event e)
+void GameScreenLevel::UpdateEnemies(float deltaTime, SDL_Event e)
 {
 	if (!m_enemies.empty())
 	{
@@ -145,46 +159,48 @@ void GameScreenLevel1::UpdateEnemies(float deltaTime, SDL_Event e)
 			//now do the update
 			m_enemies[i]->Update(deltaTime, e);
 
-			//check to see if enemy collides with player
-			if ((m_enemies[i]->GetPosition().y > 300.0f || m_enemies[i]->GetPosition().y <= 64.0f) && (m_enemies[i]->GetPosition().x < 64.0f || m_enemies[i]->GetPosition().x > SCREEN_WIDTH - 96.0f))
+			if (Collisions::Instance()->Circle(m_enemies[i], my_character))
 			{
-				//ignore collisions if behind pipe
+				if (m_enemies[i]->GetInjured())
+				{
+					m_enemies[i]->SetAlive(false);
+				}
+				else
+				{
+					if (my_character->GetAlive())
+					{
+						my_character->SetAlive(false);
+					}
+				}
+
+				//if the enemy is no longer alive then schedule it for deletion
+				if (!m_enemies[i]->GetAlive())
+				{
+					enemyIndexToDelete = i;
+				}
 			}
-			else
+
+			if (Collisions::Instance()->Box(m_enemies[i]->GetCollisionBox(), m_shock->GetCollisionBox()))
 			{
-				if (Collisions::Instance()->Circle(m_enemies[i], my_character))
+				if (!m_enemies[i]->GetInjured())
 				{
-					if (m_enemies[i]->GetInjured())
-					{
-						m_enemies[i]->SetAlive(false);
-					}
-					else
-					{
-						if (my_character->GetAlive())
-						{
-							my_character->SetAlive(false);
-						}
-					}
-
-					//if the enemy is no longer alive then schedule it for deletion
-					if (!m_enemies[i]->GetAlive())
-					{
-						enemyIndexToDelete = i;
-					}
+					m_enemies[i]->TakeDamage();
 				}
-
-				//remove dead enemies -1 each update
-				if (enemyIndexToDelete != -1)
-				{
-					m_enemies.erase(m_enemies.begin() + enemyIndexToDelete);
-				}
+			}
+			//remove dead enemies -1 each update
+			if (enemyIndexToDelete != -1)
+			{
+				m_enemies.erase(m_enemies.begin() + enemyIndexToDelete);
 			}
 		}
 	}
 }
 
-void GameScreenLevel1::Render()
+void GameScreenLevel::Render()
 {
+	
+	m_Background_texture->Render(Vector2D(0, 0), SDL_FLIP_NONE);
+
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
 		m_enemies[i]->Render();
@@ -206,12 +222,13 @@ void GameScreenLevel1::Render()
 		}
 	}
 
+	m_shock->Render();
 	my_character->Render();
 	my_character2->Render();
 	m_pow_block->Render();
 }
 
-void GameScreenLevel1::Update(float deltaTime, SDL_Event e)
+void GameScreenLevel::Update(float deltaTime, SDL_Event e)
 {
 	//Screenshake
 	if (m_screenshake)
@@ -229,6 +246,8 @@ void GameScreenLevel1::Update(float deltaTime, SDL_Event e)
 		}
 	}
 
+	m_shock->Update(deltaTime);
+
 	//Update Character.
 	my_character->Update(deltaTime, e);
 	my_character2->Update(deltaTime, e);
@@ -245,11 +264,9 @@ void GameScreenLevel1::Update(float deltaTime, SDL_Event e)
 			//Increase Score
 		}
 	}
-
-	
 }
 
-void GameScreenLevel1::DoScreenshake()
+void GameScreenLevel::DoScreenshake()
 {
 	m_screenshake = true;
 	m_shake_time = SHAKE_DURATION;
@@ -260,17 +277,17 @@ void GameScreenLevel1::DoScreenshake()
 	}
 }
 
-void GameScreenLevel1::CreateStubby(Vector2D position, FACING direction, float speed) 
+void GameScreenLevel::CreateStubby(Vector2D position, FACING direction, float speed) 
 {
 	m_enemies.push_back(new CharacterStubby(m_renderer, "Images/Stubby.png", m_level_map, position, direction, speed));
 }
 
-void GameScreenLevel1::CreateCoin(Vector2D position)
+void GameScreenLevel::CreateCoin(Vector2D position)
 {
 	m_coins.push_back(new CharacterCoin(m_renderer, "Images/Coin.png", m_level_map, position));
 }
 
-GameScreenLevel1::~GameScreenLevel1()
+GameScreenLevel::~GameScreenLevel()
 {
 	//delete m_Background_texture;
 	//m_Background_texture = nullptr;

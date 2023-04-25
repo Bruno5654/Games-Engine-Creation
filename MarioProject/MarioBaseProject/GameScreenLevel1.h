@@ -16,16 +16,17 @@ class CharacterPod;
 class CharacterStubby;
 class CharacterCoin;
 class PowBlock;
+class Shock;
 
-class GameScreenLevel1 : GameScreen
+class GameScreenLevel : GameScreen
 {
 	private:
 		Texture2D* m_Background_texture;
 		Texture2D* m_Tile_texture;
-		bool SetUpLevel();
+		bool SetUpLevel(int id);
 		Character2B* my_character;
 		CharacterPod* my_character2;
-		void SetLevelMap(char* path);
+		void SetLevelMap(string path);
 		LevelMap* m_level_map;
 		PowBlock* m_pow_block;
 		bool m_screenshake;
@@ -39,10 +40,12 @@ class GameScreenLevel1 : GameScreen
 		vector<CharacterStubby*> m_enemies;
 		vector<CharacterCoin*> m_coins;
 		LevelMap* m_current_level_map;
+		Shock* m_shock;
+		GameScreenManager* m_screenManager;
 	
 	public:
-		GameScreenLevel1(SDL_Renderer* renderer);
-		~GameScreenLevel1();
+		GameScreenLevel(SDL_Renderer* renderer, GameScreenManager* screenManager,int levelID);
+		~GameScreenLevel();
 
 		void Render() override;
 		void Update(float deltaTime, SDL_Event e) override;

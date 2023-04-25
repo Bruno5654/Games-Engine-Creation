@@ -1,9 +1,11 @@
 #include "CharacterPod.h"
 
-CharacterPod::CharacterPod(SDL_Renderer* renderer, string imagePath, Vector2D start_position, LevelMap* map) : Character(renderer, imagePath, start_position, map)
+
+CharacterPod::CharacterPod(SDL_Renderer* renderer, string imagePath, Vector2D start_position, LevelMap* map, Shock* shock) : Character(renderer, imagePath, start_position, map)
 {
 	isFloating = true;
 	m_movement_speed = MOVEMENTSPEED;
+	m_shock = shock;
 }
 
 void CharacterPod::Update(float deltaTime, SDL_Event e)
@@ -25,6 +27,20 @@ void CharacterPod::Update(float deltaTime, SDL_Event e)
 		case SDLK_DOWN:
 			m_moving_down = true;
 			break;
+		case SDLK_SPACE:
+			if (!m_shock->CheckActive())
+			{
+				if (m_facing_direction == FACING_LEFT)
+				{
+					m_shock->Activate(Vector2D(m_position.x-16, m_position.y));
+				}
+				else
+				{
+					m_shock->Activate(Vector2D(m_position.x + 16, m_position.y));
+				}
+				
+			}
+			break;
 		}
 		break;
 	case SDL_KEYUP:
@@ -45,6 +61,7 @@ void CharacterPod::Update(float deltaTime, SDL_Event e)
 		}
 		break;
 	}
+
 	Character::Update(deltaTime, e);
 }
 CharacterPod::~CharacterPod()
