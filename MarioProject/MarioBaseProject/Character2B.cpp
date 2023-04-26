@@ -5,6 +5,7 @@ Character2B::Character2B(SDL_Renderer* renderer, string imagePath, Vector2D star
 {
 	isFloating = false;
 	m_movement_speed = MOVEMENTSPEED;
+	m_alive = true;
 }
 
 void Character2B::Update(float deltaTime, SDL_Event e)

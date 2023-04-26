@@ -171,14 +171,19 @@ void GameScreenLevel::UpdateEnemies(float deltaTime, SDL_Event e)
 					if (my_character->GetAlive())
 					{
 						my_character->SetAlive(false);
+						m_screenManager->ChangeScreen(SCREEN_LEVEL1);
 					}
 				}
 
 				//if the enemy is no longer alive then schedule it for deletion
-				if (!m_enemies[i]->GetAlive())
+				if (my_character->GetAlive())
 				{
-					enemyIndexToDelete = i;
+					if (!m_enemies[i]->GetAlive())
+					{
+						enemyIndexToDelete = i;
+					}
 				}
+				
 			}
 
 			if (Collisions::Instance()->Box(m_enemies[i]->GetCollisionBox(), m_shock->GetCollisionBox()))
@@ -202,9 +207,12 @@ void GameScreenLevel::Render()
 	
 	m_Background_texture->Render(Vector2D(0, 0), SDL_FLIP_NONE);
 
-	for (int i = 0; i < m_enemies.size(); i++)
+	if (my_character->GetAlive())
 	{
-		m_enemies[i]->Render();
+		for (int i = 0; i < m_enemies.size(); i++)
+		{
+			m_enemies[i]->Render();
+		}
 	}
 
 	for (int i = 0; i < m_coins.size(); i++)
