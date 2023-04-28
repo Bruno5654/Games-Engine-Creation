@@ -2,7 +2,7 @@
 
 CharacterStubby::CharacterStubby(SDL_Renderer* renderer, string imagePath, LevelMap* map, Vector2D start_position, FACING start_facing, float movement_speed) : Character(renderer, imagePath, start_position, map)
 {
-	isFloating = true;
+	isFloating = false;
 	
 	m_facing_direction = start_facing;
 	m_movement_speed = movement_speed;

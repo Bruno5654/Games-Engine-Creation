@@ -44,8 +44,13 @@ bool GameScreenLevel::SetUpLevel(int ID)
 			//Create Players
 			if (m_level_map->GetTileAt(j, i) == 9)
 			{
-				my_character = new Character2B(m_renderer, "Images/2B.png", Vector2D(i * TILE_SIZE, j * TILE_SIZE), m_level_map); //If this is lower or higher than the small range around 336 2B starts at a like y 1333
-				my_character2 = new CharacterPod(m_renderer, "Images/Pod.png", Vector2D((i * TILE_SIZE) - TILE_SIZE, (j * TILE_SIZE) - TILE_SIZE), m_level_map, m_shock);
+				my_character = new Character2B(m_renderer, "Images/2B.png", Vector2D(i * TILE_SIZE, j * TILE_SIZE), m_level_map);
+				my_character2 = new CharacterPod(m_renderer, "Images/Pod.png", Vector2D((i * TILE_SIZE) - TILE_SIZE, j * TILE_SIZE), m_level_map, m_shock);
+			}
+
+			if (m_level_map->GetTileAt(j, i) == 10)
+			{
+				levelEnd = new CharacterLevelGoal(m_renderer, "Images/PodGoal.png", m_level_map, Vector2D(i * TILE_SIZE, j * TILE_SIZE), FACING_RIGHT);
 			}
 
 			//Create Coins
@@ -144,7 +149,6 @@ void GameScreenLevel::UpdateEnemies(float deltaTime, SDL_Event e)
 					m_enemies[i]->SetAlive(false);
 					//cout << "Dead is " << i << endl;
 				}
-					
 			}
 			
 			if (m_enemies[i]->GetPosition().x > SCREEN_WIDTH)
@@ -171,7 +175,7 @@ void GameScreenLevel::UpdateEnemies(float deltaTime, SDL_Event e)
 					if (my_character->GetAlive())
 					{
 						my_character->SetAlive(false);
-						m_screenManager->ChangeScreen(SCREEN_LEVEL1);
+						m_screenManager->QueueScreen(SCREEN_LEVEL1);
 					}
 				}
 
@@ -183,7 +187,6 @@ void GameScreenLevel::UpdateEnemies(float deltaTime, SDL_Event e)
 						enemyIndexToDelete = i;
 					}
 				}
-				
 			}
 
 			if (Collisions::Instance()->Box(m_enemies[i]->GetCollisionBox(), m_shock->GetCollisionBox()))
@@ -234,6 +237,7 @@ void GameScreenLevel::Render()
 	m_shock->Render();
 	my_character->Render();
 	my_character2->Render();
+	levelEnd->Render();
 	//m_pow_block->Render();
 }
 
@@ -272,6 +276,12 @@ void GameScreenLevel::Update(float deltaTime, SDL_Event e)
 			m_coins.erase(m_coins.begin() + i);
 			//Increase Score
 		}
+	}
+
+	//Check to change screen.
+	if (m_screenManager->GetNextScreen() != NONE)
+	{
+		m_screenManager->ChangeScreen();
 	}
 }
 

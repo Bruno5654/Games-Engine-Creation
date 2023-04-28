@@ -35,7 +35,6 @@ class Character
 		virtual void Jump();
 		virtual void AddGravity(float deltaTime);
 
-
 	private:
 		
 		LevelMap* m_current_level_map;

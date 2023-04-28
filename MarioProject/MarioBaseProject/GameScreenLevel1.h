@@ -8,6 +8,7 @@
 #include "CharacterPod.h"
 #include "CharacterStubby.h"
 #include "CharacterCoin.h"
+#include "CharacterLevelGoal.h"
 #include <vector>
 
 class Texture2D;
@@ -15,6 +16,7 @@ class Character2B;
 class CharacterPod;
 class CharacterStubby;
 class CharacterCoin;
+class CharacterLevelGoal;
 class PowBlock;
 class Shock;
 
@@ -26,6 +28,7 @@ class GameScreenLevel : GameScreen
 		bool SetUpLevel(int id);
 		Character2B* my_character;
 		CharacterPod* my_character2;
+		CharacterLevelGoal* levelEnd;
 		void SetLevelMap(string path);
 		LevelMap* m_level_map;
 		PowBlock* m_pow_block;

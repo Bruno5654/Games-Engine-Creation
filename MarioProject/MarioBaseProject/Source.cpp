@@ -39,7 +39,7 @@ int main(int argc, char* args[])
 		game_screen_manager = new GameScreenManager(g_renderer, SCREEN_LEVEL1);
 		//Set the time.
 		g_old_time = SDL_GetTicks();
-		SDL_Delay(5000);
+		//SDL_Delay(5000);
 	}
 	
 	//Flat to check if we quit.
