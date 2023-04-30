@@ -32,30 +32,46 @@ void Character::Render()
 
 void Character::Update(float deltaTime, SDL_Event e)
 {
-	if (m_moving_left)
+	//Deal with jumping first.
+	if (m_jumping)
+	{
+		//Adjust Postion.
+		m_position.y -= m_jump_force * deltaTime;
+
+		//Reduce jump force.
+		m_jump_force -= deltaTime * JUMP_FORCE_DECREMENT;
+
+		//If jump force is 0.
+		if (m_jump_force <= 0.0f)
+		{
+			m_jumping = false;
+		}
+	}
+
+	int centralX_position = (int)(m_position.x + (m_texture->GetWidth() * 0.5)) / TILE_WIDTH;
+	int foot_position = (int)(m_position.y + m_texture->GetHeight()) / TILE_HEIGHT;
+	int head_postion = (int)(m_position.y) / TILE_HEIGHT;
+
+	if (m_moving_left && !(m_position.x < LEFT_BUFFER))
 	{
 		MoveLeft(deltaTime);
 	}
-	else if (m_moving_right)
+	else if (m_moving_right && !(m_position.x > SCREEN_WIDTH - RIGHT_BUFFER))
 	{
 		MoveRight(deltaTime);
 	}
-	
-	if (m_moving_up)
+
+	if (m_moving_up && !(m_current_level_map->GetTileAt(head_postion, centralX_position) == 4))
 	{
 		MoveUp(deltaTime);
 	}
-	else if (m_moving_down)
+	else if (m_moving_down && !(m_current_level_map->GetTileAt(foot_position, centralX_position) == 4))
 	{
 		MoveDown(deltaTime);
 	}
-	
-	//Collision position variables
-	int centralX_position = (int)(m_position.x + (m_texture->GetWidth() * 0.5)) / TILE_WIDTH;
-	int foot_position = (int)(m_position.y + m_texture->GetHeight()) / TILE_HEIGHT;
 
-	//Deal with gravity.
-	if (!isFloating && m_current_level_map->GetTileAt(foot_position,centralX_position) != 1)
+	//Deal with gravity
+	if (!isFloating && m_current_level_map->GetTileAt(foot_position, centralX_position) != 1 && m_current_level_map->GetTileAt(foot_position, centralX_position) != 4)
 	{
 		AddGravity(deltaTime);
 	}
@@ -63,28 +79,33 @@ void Character::Update(float deltaTime, SDL_Event e)
 	{
 		m_can_jump = true;
 	}
+
+	if (m_current_level_map->GetTileAt(head_postion, centralX_position) == 4)
+	{
+		CancelJump();
+	}
 }
 
 void Character::MoveLeft(float deltaTime)
 {
 	m_facing_direction = FACING_LEFT;
-	m_position.x -= deltaTime * MOVEMENTSPEED;
+	m_position.x -= deltaTime * m_movespeed;
 }
 
 void Character::MoveRight(float deltaTime)
 {
 	m_facing_direction = FACING_RIGHT;
-	m_position.x += deltaTime * MOVEMENTSPEED;
+	m_position.x += deltaTime * m_movespeed;
 }
 
 void Character::MoveUp(float deltaTime)
 {
-	m_position.y -= deltaTime * MOVEMENTSPEED;
+	m_position.y -= deltaTime * m_movespeed;
 }
 
 void Character::MoveDown(float deltaTime)
 {
-	m_position.y += deltaTime * MOVEMENTSPEED;
+	m_position.y += deltaTime * m_movespeed;
 }
 
 void Character::AddGravity(float deltaTime)
@@ -99,12 +120,12 @@ void Character::AddGravity(float deltaTime)
 	}
 }
 
-void Character::Jump()
+void Character::Jump(float jumpForce)
 {
 	//Jump.
-	m_jump_force = INITAL_JUMP_FORCE;
-	m_jumping = true;
 	m_can_jump = false;
+	m_jump_force = jumpForce;
+	m_jumping = true;
 }
 
 void Character::SetPosition(Vector2D new_position)

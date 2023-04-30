@@ -8,12 +8,12 @@ class CharacterStubby : public Character
 		float m_single_sprite_h;
 		bool m_injured;
 		float m_injured_time;
+		bool m_isFlyer;
 		void FlipRightwayUp();
 	public:
-		CharacterStubby(SDL_Renderer* renderer, string imagePath, LevelMap* map, Vector2D start_position, FACING start_facing, float movement_speed);
+		CharacterStubby(SDL_Renderer* renderer, string imagePath, LevelMap* map, Vector2D start_position, FACING start_facing, float movement_speed, bool isFlyer);
 		~CharacterStubby();
 		void TakeDamage();
-		void Jump();
 		void Update(float deltaTime, SDL_Event e);
 		void Render();
 		FACING m_facing_direction;

@@ -22,6 +22,7 @@ class GameScreenManager
 		void Update(float deltaTime, SDL_Event e);
 		void QueueScreen(SCREENS new_screen);
 		SCREENS GetNextScreen() { return m_next_screen; }
+		SCREENS GetCurrentScreen() { return m_current_screen_enum; }
 		void ChangeScreen();
 };
 

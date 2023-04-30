@@ -25,6 +25,8 @@ class GameScreenLevel : GameScreen
 	private:
 		Texture2D* m_Background_texture;
 		Texture2D* m_Tile_texture;
+		Texture2D* m_Tile2_texture;
+		int m_levelID;
 		bool SetUpLevel(int id);
 		Character2B* my_character;
 		CharacterPod* my_character2;
@@ -38,7 +40,8 @@ class GameScreenLevel : GameScreen
 		float m_background_yPos;
 		void DoScreenshake();
 		void UpdateEnemies(float deltaTime, SDL_Event e);
-		void CreateStubby(Vector2D position, FACING direction, float speed);
+		void CreateStubby(Vector2D position, FACING direction, float speed,bool isFlying);
+		void CreateFlyer(Vector2D position, FACING direction, float speed);
 		void CreateCoin(Vector2D position);
 		vector<CharacterStubby*> m_enemies;
 		vector<CharacterCoin*> m_coins;
@@ -53,8 +56,6 @@ class GameScreenLevel : GameScreen
 		void Render() override;
 		void Update(float deltaTime, SDL_Event e) override;
 		void UpdatePowBlock();
-
-
 };
 
 #endif

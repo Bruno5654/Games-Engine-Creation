@@ -1,16 +1,25 @@
 #include "CharacterStubby.h"
 
-CharacterStubby::CharacterStubby(SDL_Renderer* renderer, string imagePath, LevelMap* map, Vector2D start_position, FACING start_facing, float movement_speed) : Character(renderer, imagePath, start_position, map)
+CharacterStubby::CharacterStubby(SDL_Renderer* renderer, string imagePath, LevelMap* map, Vector2D start_position, FACING start_facing, float movement_speed,bool isFlying) : Character(renderer, imagePath, start_position, map)
 {
-	isFloating = false;
+	m_isFlyer = isFlying;
 	
 	m_facing_direction = start_facing;
-	m_movement_speed = movement_speed;
+	m_movespeed = 50.0f;
 	m_position = start_position;
 	m_injured = false;
 
 	m_single_sprite_w = m_texture->GetWidth() / 2;
 	m_single_sprite_h = m_texture->GetHeight();
+
+	if (isFlying)
+	{
+		isFloating = true;
+	}
+	else
+	{
+		isFloating = false;
+	}
 }
 
 
@@ -18,16 +27,7 @@ void CharacterStubby::TakeDamage()
 {
 	m_injured = true;
 	m_injured_time = INJURED_TIME;
-}
-
-void CharacterStubby::Jump()
-{
-	if (!m_jumping)
-	{
-		m_jump_force = INITIAL_JUMP_FORCE_SMALL;
-		m_jumping = true;
-		m_can_jump = false;
-	}
+	isFloating = false;
 }
 
 void CharacterStubby::Update(float deltaTime, SDL_Event e)
@@ -96,7 +96,9 @@ void CharacterStubby::FlipRightwayUp()
 	}
 
 	m_injured = false;
-	Jump();
+	Jump(300.0f);
+	if(m_isFlyer)
+		isFloating = true;
 }
 
 CharacterStubby::~CharacterStubby()

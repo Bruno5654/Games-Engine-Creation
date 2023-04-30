@@ -3,6 +3,9 @@
 
 class CharacterLevelGoal : public Character
 {
+private:
+	float m_delay;
+	Vector2D originPOS;
 public:
 	CharacterLevelGoal(SDL_Renderer* renderer, string imagePath, LevelMap* map, Vector2D start_position, FACING start_facing);
 	~CharacterLevelGoal();

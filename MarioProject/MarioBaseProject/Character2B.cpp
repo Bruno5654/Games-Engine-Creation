@@ -4,29 +4,12 @@
 Character2B::Character2B(SDL_Renderer* renderer, string imagePath, Vector2D start_position, LevelMap* map) : Character(renderer, imagePath, start_position, map)
 {
 	isFloating = false;
-	m_movement_speed = MOVEMENTSPEED;
+	m_movespeed = MOVEMENTSPEED;
 	m_alive = true;
 }
 
 void Character2B::Update(float deltaTime, SDL_Event e)
 {
-	
-	//Deal with jumping first.
-	if (m_jumping)
-	{
-		//Adjust Postion.
-		m_position.y -= m_jump_force * deltaTime;
-
-		//Reduce jump force.
-		m_jump_force -= deltaTime * JUMP_FORCE_DECREMENT;
-
-		//If jump force is 0.
-		if (m_jump_force <= 0.0f)
-		{
-			m_jumping = false;
-		}
-	}
-
 	switch (e.type)
 	{
 	case SDL_KEYDOWN:
@@ -41,7 +24,7 @@ void Character2B::Update(float deltaTime, SDL_Event e)
 		case SDLK_w:
 			if (m_can_jump)
 			{
-				Jump();
+				Jump(INITAL_JUMP_FORCE);
 			}
 			break;
 		}
@@ -61,6 +44,7 @@ void Character2B::Update(float deltaTime, SDL_Event e)
 	
 	Character::Update(deltaTime,e);
 }
+
 Character2B::~Character2B()
 {
 

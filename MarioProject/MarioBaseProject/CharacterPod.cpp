@@ -4,7 +4,7 @@
 CharacterPod::CharacterPod(SDL_Renderer* renderer, string imagePath, Vector2D start_position, LevelMap* map, Shock* shock) : Character(renderer, imagePath, start_position, map)
 {
 	isFloating = true;
-	m_movement_speed = MOVEMENTSPEED;
+	m_movespeed = MOVEMENTSPEED;
 	m_shock = shock;
 }
 
@@ -38,7 +38,6 @@ void CharacterPod::Update(float deltaTime, SDL_Event e)
 				{
 					m_shock->Activate(Vector2D(m_position.x + 16, m_position.y));
 				}
-				
 			}
 			break;
 		}

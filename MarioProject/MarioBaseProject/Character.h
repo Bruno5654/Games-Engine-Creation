@@ -28,11 +28,12 @@ class Character
 		bool m_alive;
 		float m_jump_force;
 		float m_collision_radius;
+		float m_movespeed;
 		virtual void MoveLeft(float deltaTime);
 		virtual void MoveRight(float deltaTime);
 		virtual void MoveUp(float deltaTime);
 		virtual void MoveDown(float deltaTime);
-		virtual void Jump();
+		virtual void Jump(float jumpForce);
 		virtual void AddGravity(float deltaTime);
 
 	private:
@@ -42,8 +43,6 @@ class Character
 	public:
 		Character(SDL_Renderer* renderer, string imagePath, Vector2D start_position, LevelMap* map);
 		~Character();
-
-		float m_movement_speed;
 
 		virtual void Render();
 		virtual void Update(float deltaTime,SDL_Event e);
