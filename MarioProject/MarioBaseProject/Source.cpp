@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include "SDL_ttf.h"
 #include "constants.h"
 #include <iostream>
 #include "Texture2D.h"
@@ -39,7 +40,7 @@ int main(int argc, char* args[])
 		game_screen_manager = new GameScreenManager(g_renderer, SCREEN_LEVEL1);
 		//Set the time.
 		g_old_time = SDL_GetTicks();
-		//SDL_Delay(5000);
+		// SDL_Delay(5000);
 	}
 	
 	//Flat to check if we quit.
@@ -66,9 +67,15 @@ bool InitSDL()
 		return false;
 	}
 
+	/*if (TTF_Init() == -1)
+	{
+		cout << "Mixer could not init. Error: " << Mix_GetError();
+		return false;
+	}*/
+
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) //Error check.
 	{
-		cout << "SDL video did not initalise. Error: " << SDL_GetError();
+		cout << "SDL ttf did not initalise. Error: " << TTF_GetError();
 		return false;
 	}
 	else //Create window
@@ -162,6 +169,7 @@ void CLoseSDL()
 
 	//Quit SDL subsytems.
 	IMG_Quit();
+	//TTF_Quit();
 	SDL_Quit();
 
 }

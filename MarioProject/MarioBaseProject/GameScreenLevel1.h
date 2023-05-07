@@ -12,6 +12,7 @@
 #include <vector>
 
 class Texture2D;
+class TextRenderer;
 class Character2B;
 class CharacterPod;
 class CharacterStubby;
@@ -26,7 +27,11 @@ class GameScreenLevel : GameScreen
 		Texture2D* m_Background_texture;
 		Texture2D* m_Tile_texture;
 		Texture2D* m_Tile2_texture;
+		TextRenderer* m_text;
+		int score;
+		int levelStartScore;
 		int m_levelID;
+		string scoreMessage;
 		bool SetUpLevel(int id);
 		Character2B* my_character;
 		CharacterPod* my_character2;
@@ -41,7 +46,6 @@ class GameScreenLevel : GameScreen
 		void DoScreenshake();
 		void UpdateEnemies(float deltaTime, SDL_Event e);
 		void CreateStubby(Vector2D position, FACING direction, float speed,bool isFlying);
-		void CreateFlyer(Vector2D position, FACING direction, float speed);
 		void CreateCoin(Vector2D position);
 		vector<CharacterStubby*> m_enemies;
 		vector<CharacterCoin*> m_coins;

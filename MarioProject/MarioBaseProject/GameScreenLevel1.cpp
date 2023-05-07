@@ -1,5 +1,6 @@
 #include "GameScreenLevel1.h"
 #include "Texture2D.h"
+#include "TextRenderer.h"
 #include <iostream>
 #include <fstream>
 #include "Collisions.h"
@@ -10,6 +11,7 @@ GameScreenLevel::GameScreenLevel(SDL_Renderer* renderer, GameScreenManager* scre
 	m_level_map = nullptr;
 	m_screenManager = screenManager;
 	m_levelID = levelID;
+	scoreMessage = "Score: ";
 	SetUpLevel(m_levelID);
 }
 
@@ -37,6 +39,9 @@ bool GameScreenLevel::SetUpLevel(int ID)
 	}
 
 	m_shock = new Shock(m_renderer,"Images/Shock.png", Vector2D(-100,-100));
+
+	m_text = new TextRenderer(m_renderer);
+	if (!m_text->LoadFont("Fonts/Cascadia.ttf", 15, scoreMessage + std::to_string(score), { 255,0,0,255 }));
 
 	//Set up level.
 
@@ -262,6 +267,7 @@ void GameScreenLevel::Render()
 	my_character->Render();
 	my_character2->Render();
 	levelEnd->Render();
+	m_text->Render(0,10);
 	
 	//m_pow_block->Render();
 }
@@ -311,6 +317,12 @@ void GameScreenLevel::Update(float deltaTime, SDL_Event e)
 		{
 		case 1:
 			m_screenManager->QueueScreen(SCREEN_LEVEL2);
+			break;
+		case 2:
+			m_screenManager->QueueScreen(SCREEN_LEVEL3);
+			break;
+		case 3:
+			m_screenManager->QueueScreen(SCREEN_LEVEL1);
 			break;
 		default:
 			m_screenManager->QueueScreen(SCREEN_LEVEL2);
