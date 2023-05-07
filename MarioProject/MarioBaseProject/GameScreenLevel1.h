@@ -29,7 +29,8 @@ class GameScreenLevel : GameScreen
 		Texture2D* m_Tile2_texture;
 		TextRenderer* m_text;
 		int score;
-		int levelStartScore;
+		int oldScore;
+		SDL_Color scoreColor;
 		int m_levelID;
 		string scoreMessage;
 		bool SetUpLevel(int id);

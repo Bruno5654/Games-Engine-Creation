@@ -21,6 +21,9 @@ class GameScreenManager
 		void Render();
 		void Update(float deltaTime, SDL_Event e);
 		void QueueScreen(SCREENS new_screen);
+		int levelStartScore;
+		int ReturnLastScore() { return levelStartScore; };
+		void SetLastScore(int score) { levelStartScore = score; };
 		SCREENS GetNextScreen() { return m_next_screen; }
 		SCREENS GetCurrentScreen() { return m_current_screen_enum; }
 		void ChangeScreen();

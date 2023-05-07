@@ -13,6 +13,7 @@ GameScreenLevel::GameScreenLevel(SDL_Renderer* renderer, GameScreenManager* scre
 	m_levelID = levelID;
 	scoreMessage = "Score: ";
 	SetUpLevel(m_levelID);
+	scoreColor = { 0,0,0,255 };
 }
 
 bool GameScreenLevel::SetUpLevel(int ID)
@@ -41,12 +42,18 @@ bool GameScreenLevel::SetUpLevel(int ID)
 	m_shock = new Shock(m_renderer,"Images/Shock.png", Vector2D(-100,-100));
 
 	m_text = new TextRenderer(m_renderer);
-	if (!m_text->LoadFont("Fonts/Cascadia.ttf", 15, scoreMessage + std::to_string(score), { 255,0,0,255 }));
+	if (!m_text->LoadFont("Fonts/Cascadia.ttf", 15, scoreMessage + std::to_string(score), scoreColor))
+	{
+		std::cout << "Failed to load text! Error" << std::endl;
+		return false;
+	}
 
 	//Set up level.
 
 	string path1 = "Level" + to_string(ID);
 	string path2 = ".txt";
+
+	score = m_screenManager->ReturnLastScore();
 
 	SetLevelMap(path1+path2);
 
@@ -97,6 +104,8 @@ bool GameScreenLevel::SetUpLevel(int ID)
 					CreateStubby(Vector2D(i * TILE_SIZE, j * TILE_SIZE), FACING_LEFT, STUBBY_SPEED, true);
 				}
 			}
+
+			
 
 		}
 	}
@@ -172,7 +181,6 @@ void GameScreenLevel::UpdateEnemies(float deltaTime, SDL_Event e)
 				if (m_enemies[i]->GetPosition().x < (float)(-m_enemies[i]->GetCollisionBox().width * 0.5f) || m_enemies[i]->GetPosition().x > SCREEN_WIDTH - (float)(m_enemies[i]->GetCollisionBox().width * 0.55f))
 				{
 					m_enemies[i]->SetAlive(false);
-					//cout << "Dead is " << i << endl;
 				}
 			}
 			
@@ -194,12 +202,14 @@ void GameScreenLevel::UpdateEnemies(float deltaTime, SDL_Event e)
 				if (m_enemies[i]->GetInjured())
 				{
 					m_enemies[i]->SetAlive(false);
+					score++;
 				}
 				else
 				{
 					if (my_character->GetAlive())
 					{
 						my_character->SetAlive(false);
+						score = m_screenManager->ReturnLastScore();
 						m_screenManager->QueueScreen(m_screenManager->GetCurrentScreen());
 					}
 				}
@@ -267,9 +277,7 @@ void GameScreenLevel::Render()
 	my_character->Render();
 	my_character2->Render();
 	levelEnd->Render();
-	m_text->Render(0,10);
-	
-	//m_pow_block->Render();
+	m_text->Render(10,5);
 }
 
 void GameScreenLevel::Update(float deltaTime, SDL_Event e)
@@ -307,8 +315,14 @@ void GameScreenLevel::Update(float deltaTime, SDL_Event e)
 		if (Collisions::Instance()->Circle(m_coins[i], my_character))
 		{
 			m_coins.erase(m_coins.begin() + i);
-			//Increase Score
+			score++;
 		}
+	}
+
+	if (m_text != nullptr && score != oldScore)
+	{
+		oldScore = score;
+		m_text->LoadFont("Fonts/Cascadia.ttf", 15, scoreMessage + std::to_string(score), scoreColor);
 	}
 
 	if (Collisions::Instance()->Circle(levelEnd, my_character))
@@ -328,6 +342,8 @@ void GameScreenLevel::Update(float deltaTime, SDL_Event e)
 			m_screenManager->QueueScreen(SCREEN_LEVEL2);
 			break;
 		}
+
+		m_screenManager->SetLastScore(score);
 	}
 
 	//Check to change screen.
